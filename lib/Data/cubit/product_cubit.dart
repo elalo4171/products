@@ -12,6 +12,10 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
     loadFirstProducts();
   }
 
+  void changePage(int index) {
+    emit(state.copyWith(currentPage: index));
+  }
+
   void removeFavorite(String id) {
     List<ProductModel> temp = state.productsFavorite;
     temp.removeWhere((e) => e.id == id);
