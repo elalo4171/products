@@ -31,12 +31,23 @@ class _BuildHomePage extends StatelessWidget {
           children: [
             SizedBox(
               height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: List.generate(
-                  20,
-                  (index) => CategoryItem(title: "Categoria $index", id: index),
-                ),
+              child: BlocBuilder<ProductCubit, ProductState>(
+                builder: (context, state) {
+                  return ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: List.generate(
+                      20,
+                      (index) => CategoryItem(
+                        onTap: (p0) {
+                          context.read<ProductCubit>().changeCategory(index);
+                        },
+                        title: "Categoria $index",
+                        id: index,
+                        idSelected: state.idCategory,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             Expanded(child: BlocBuilder<ProductCubit, ProductState>(
@@ -49,7 +60,12 @@ class _BuildHomePage extends StatelessWidget {
                 return ListView(
                   children: state.products
                       .map<Widget>(
-                        (e) => ProductWidget(productModel: e),
+                        (e) => ProductWidget(
+                          productModel: e,
+                          onFavorite: (id) {
+                            context.read<ProductCubit>().addProdutToFavorite(e);
+                          },
+                        ),
                       )
                       .toList(),
                 );
@@ -64,12 +80,15 @@ class ProductWidget extends StatelessWidget {
   const ProductWidget({
     Key? key,
     required this.productModel,
+    required this.onFavorite,
   }) : super(key: key);
 
   final ProductModel productModel;
+  final Function(String) onFavorite;
 
   @override
   Widget build(BuildContext context) {
+    final ProductCubit cubit = context.read<ProductCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -97,8 +116,10 @@ class ProductWidget extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite),
+                      onPressed: () {
+                        onFavorite(productModel.id);
+                      },
+                      icon: Icon(cubit.isFavorite(productModel.id) ? Icons.favorite : Icons.favorite_border),
                     ),
                   )
                 ],
@@ -117,28 +138,33 @@ class CategoryItem extends StatelessWidget {
     required this.title,
     required this.id,
     this.idSelected = 0,
+    required this.onTap,
   }) : super(key: key);
 
   final String title;
   final int id;
   final int idSelected;
+  final Function(int) onTap;
 
   @override
   Widget build(BuildContext context) {
     final bool isSelected = id == idSelected;
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      color: isSelected ? ColorsCustom.primary : Colors.white,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
-              color: isSelected ? Colors.white : Colors.black,
+    return GestureDetector(
+      onTap: () => onTap(id),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        color: isSelected ? ColorsCustom.primary : Colors.white,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected ? Colors.white : Colors.black,
+              ),
             ),
           ),
         ),

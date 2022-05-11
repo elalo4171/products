@@ -3,7 +3,8 @@
 //     final product = productFromJson(jsonString);
 import 'dart:convert';
 
-List<ProductModel> productFromJson(String str) => List<ProductModel>.from(json.decode(str).map((x) => ProductModel.fromJson(x)));
+List<ProductModel> productFromJson(String str) =>
+    List<ProductModel>.from(json.decode(str).map((x) => ProductModel.fromJson(x)));
 
 String productToJson(List<ProductModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
@@ -18,6 +19,7 @@ class ProductModel {
     required this.category,
     required this.url,
     required this.id,
+    required this.isFavorite,
   });
 
   final DateTime? createdAt;
@@ -29,6 +31,7 @@ class ProductModel {
   final String category;
   final String url;
   final String id;
+  final bool isFavorite;
 
   ProductModel copyWith({
     DateTime? createdAt,
@@ -40,6 +43,7 @@ class ProductModel {
     String? category,
     String? url,
     String? id,
+    bool? isFavorite,
   }) =>
       ProductModel(
         createdAt: createdAt ?? this.createdAt,
@@ -51,6 +55,7 @@ class ProductModel {
         category: category ?? this.category,
         url: url ?? this.url,
         id: id ?? this.id,
+        isFavorite: isFavorite ?? this.isFavorite,
       );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
@@ -63,6 +68,7 @@ class ProductModel {
         category: json["category"],
         url: json["url"],
         id: json["id"],
+        isFavorite: json["is_favorite"] == null ? false : json["is_favorite"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,5 +81,6 @@ class ProductModel {
         "category": category,
         "url": url,
         "id": id,
+        "is_favorite": isFavorite,
       };
 }
