@@ -5,10 +5,28 @@ import 'package:products/Theme/colors.dart';
 
 import '../Data/cubit/product_cubit.dart';
 
-class ShowHome extends StatelessWidget {
+class ShowHome extends StatefulWidget {
   const ShowHome({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ShowHome> createState() => _ShowHomeState();
+}
+
+class _ShowHomeState extends State<ShowHome> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    final bloc = context.read<ProductCubit>();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        bloc.getMoreProducts();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +61,7 @@ class ShowHome extends StatelessWidget {
               );
             }
             return ListView(
+              controller: _scrollController,
               children: state.products
                   .map<Widget>(
                     (e) => ProductWidget(

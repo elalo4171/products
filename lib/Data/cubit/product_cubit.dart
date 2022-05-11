@@ -12,6 +12,15 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
     loadFirstProducts();
   }
 
+  void getMoreProducts() async {
+    final products = await repository.getProducts(state.pagination + 1);
+    emit(state.copyWith(
+      status: StatusPage.loaded,
+      products: state.products + products,
+      pagination: state.pagination + 1,
+    ));
+  }
+
   void changePage(int index) {
     emit(state.copyWith(currentPage: index));
   }
@@ -47,6 +56,7 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
     if (state.products.isNotEmpty) {
       return;
     }
+    emit(state.copyWith(status: StatusPage.loading));
     final List<ProductModel> products = await repository.getProducts(null);
     emit(state.copyWith(products: products, status: StatusPage.loaded));
   }
