@@ -76,7 +76,7 @@ class _BuildHomePage extends StatelessWidget {
   }
 }
 
-class ProductWidget extends StatelessWidget {
+class ProductWidget extends StatefulWidget {
   const ProductWidget({
     Key? key,
     required this.productModel,
@@ -86,6 +86,11 @@ class ProductWidget extends StatelessWidget {
   final ProductModel productModel;
   final Function(String) onFavorite;
 
+  @override
+  State<ProductWidget> createState() => _ProductWidgetState();
+}
+
+class _ProductWidgetState extends State<ProductWidget> {
   @override
   Widget build(BuildContext context) {
     final ProductCubit cubit = context.read<ProductCubit>();
@@ -102,24 +107,25 @@ class ProductWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: Image.network(
-                  productModel.imagen,
+                  widget.productModel.imagen,
                 ),
               ),
             ),
             ListTile(
-              title: Text(productModel.name),
+              title: Text(widget.productModel.name),
               subtitle: Column(
                 children: [
                   Text(
-                    productModel.description,
+                    widget.productModel.description,
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
                       onPressed: () {
-                        onFavorite(productModel.id);
+                        widget.onFavorite(widget.productModel.id);
+                        setState(() {});
                       },
-                      icon: Icon(cubit.isFavorite(productModel.id) ? Icons.favorite : Icons.favorite_border),
+                      icon: Icon(cubit.isFavorite(widget.productModel.id) ? Icons.favorite : Icons.favorite_border),
                     ),
                   )
                 ],
