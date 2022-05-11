@@ -5,6 +5,7 @@ import 'package:products/routes.dart';
 import 'package:products/Theme/theme.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final storage = await HydratedStorage.build(
     storageDirectory: await getTemporaryDirectory(),
   );

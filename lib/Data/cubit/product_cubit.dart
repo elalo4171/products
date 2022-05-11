@@ -8,12 +8,14 @@ part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> with HydratedMixin {
   final ProductRepositoryI repository;
-  ProductCubit(this.repository) : super(const ProductState());
+  ProductCubit(this.repository) : super(const ProductState()){
+    loadFirstProducts();
+  }
 
 
   Future<void> loadFirstProducts() async {
-    final List<ProductModel> products = await repository.getProducts(1);
-    emit(state.copyWith(products: products));
+    final List<ProductModel> products = await repository.getProducts(null);
+    emit(state.copyWith(products: products, status: StatusPage.loaded));
   }
 
   @override

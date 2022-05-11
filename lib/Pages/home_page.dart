@@ -39,9 +39,21 @@ class _BuildHomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Expanded(
-                child: ListView(
-              children: [],
+            Expanded(child: BlocBuilder<ProductCubit, ProductState>(
+              builder: (context, state) {
+                if (state.status == StatusPage.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return ListView(
+                  children: state.products
+                      .map<Widget>(
+                        (e) => ProductWidget(productModel: e),
+                      )
+                      .toList(),
+                );
+              },
             )),
           ],
         ));
@@ -71,7 +83,7 @@ class ProductWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16.0),
                 child: Image.network(
-                  productModel.url,
+                  productModel.imagen,
                 ),
               ),
             ),

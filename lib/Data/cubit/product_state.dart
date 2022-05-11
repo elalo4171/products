@@ -9,7 +9,7 @@ enum StatusPage {
 class ProductState extends Equatable {
   const ProductState({
     this.products = const [],
-    this.status = StatusPage.loaded,
+    this.status = StatusPage.loading,
   });
 
   final List<ProductModel> products;
@@ -43,5 +43,6 @@ class ProductState extends Equatable {
   @override
   List<Object?> get props => [
         products,
+        status,
       ];
 }

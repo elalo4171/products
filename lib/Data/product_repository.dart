@@ -13,8 +13,8 @@ class ProductRepository implements ProductRepositoryI {
       host: '627ad722b54fe6ee007e8c49.mockapi.io',
       path: '/api/products/products',
       queryParameters: {
-        'page': pag ?? 1,
-        'limit': 5,
+        'page': pag != null ? pag.toString() : '1',
+        'limit': '5',
       },
     );
 
