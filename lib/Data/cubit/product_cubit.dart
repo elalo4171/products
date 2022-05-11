@@ -10,6 +10,12 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
   final ProductRepositoryI repository;
   ProductCubit(this.repository) : super(const ProductState());
 
+
+  Future<void> loadFirstProducts() async {
+    final List<ProductModel> products = await repository.getProducts(1);
+    emit(state.copyWith(products: products));
+  }
+
   @override
   ProductState? fromJson(Map<String, dynamic> json) {
     return ProductState.fromJson(json);
