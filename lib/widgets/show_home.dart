@@ -16,6 +16,8 @@ class ShowHome extends StatefulWidget {
 
 class _ShowHomeState extends State<ShowHome> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  String search = '';
 
   @override
   void initState() {
@@ -49,6 +51,21 @@ class _ShowHomeState extends State<ShowHome> {
             },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: const InputDecoration(
+              hintText: 'Buscar producto',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (e) {
+              // context.read<ProductCubit>().changeSearch(e);
+              search = e;
+              setState(() {});
+            },
+          ),
+        ),
         Expanded(child: BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
             if (state.status == StatusPage.loading) {
@@ -60,6 +77,9 @@ class _ShowHomeState extends State<ShowHome> {
             if (state.category.isNotEmpty) {
               products.removeWhere((element) => element.category != state.category);
             }
+            if (search.isNotEmpty) {
+              products.removeWhere((element) => !element.name.toLowerCase().contains(search.toLowerCase()));
+            }
             return ListView(
               controller: _scrollController,
               children: products
@@ -67,7 +87,30 @@ class _ShowHomeState extends State<ShowHome> {
                     (e) => ProductWidget(
                       productModel: e,
                       onFavorite: (id) {
-                        context.read<ProductCubit>().addProdutToFavorite(e);
+                        if (!state.productsFavorite.contains(e)) {
+                          showDialog(
+                            context: context,
+                            builder: (_) => AlertDialog(
+                              title: const Text('Agregar a favoritos'),
+                              content: const Text('¿Desea agregar este producto a favoritos?'),
+                              actions: [
+                                ElevatedButton(
+                                  child: const Text('Cancelar'),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                ElevatedButton(
+                                  child: const Text('Agregar'),
+                                  onPressed: () {
+                                    context.read<ProductCubit>().addProdutToFavorite(e);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          context.read<ProductCubit>().addProdutToFavorite(e);
+                        }
                       },
                     ),
                   )
