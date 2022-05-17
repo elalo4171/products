@@ -13,5 +13,8 @@ Para obtener los productos cree una api mock con el servicio de [mockAPI](https:
 
 # Ios:
 
-![alt text](https://github.com/elalo4171/products/blob/main/images/Screen%20Shot%202022-05-16%20at%2023.54.05.png?raw=true)
+![alt text](https://github.com/elalo4171/products/blob/main/images/Screen%20Shot%202022-05-17%20at%200.31.58.png?raw=true)
+![alt text](https://github.com/elalo4171/products/blob/main/images/Screen%20Shot%202022-05-17%20at%200.32.13.png?raw=true)
+![alt text](https://github.com/elalo4171/products/blob/main/images/Screen%20Shot%202022-05-17%20at%200.32.36.png?raw=true)
+![alt text](https://github.com/elalo4171/products/blob/main/images/Screen%20Shot%202022-05-17%20at%200.32.51.png?raw=true)
 
