@@ -17,15 +17,23 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _BuildHomePage extends StatelessWidget {
+class _BuildHomePage extends StatefulWidget {
   const _BuildHomePage({Key? key}) : super(key: key);
 
+  @override
+  State<_BuildHomePage> createState() => _BuildHomePageState();
+}
+
+class _BuildHomePageState extends State<_BuildHomePage> {
   @override
   Widget build(BuildContext context) {
     final _theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Products', style: _theme.textTheme.titleLarge ,),
+        title: Text(
+          'Products',
+          style: _theme.textTheme.titleLarge,
+        ),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
@@ -49,6 +57,7 @@ class _BuildHomePage extends StatelessWidget {
                                 productModel: e,
                                 onFavorite: (id) {
                                   context.read<ProductCubit>().addProdutToFavorite(e);
+                                  setState(() {});
                                 },
                               ),
                             )
