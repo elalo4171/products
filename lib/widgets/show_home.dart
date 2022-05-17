@@ -55,9 +55,14 @@ class _ShowHomeState extends State<ShowHome> {
           padding: const EdgeInsets.all(16.0),
           child: TextField(
             controller: _searchController,
-            decoration: const InputDecoration(
+            decoration:  InputDecoration(
               hintText: 'Buscar producto',
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(onPressed: (){
+                search = "";
+                _searchController.clear();
+              }, icon: const Icon(Icons.close))
+              
             ),
             onChanged: (e) {
               // context.read<ProductCubit>().changeSearch(e);
