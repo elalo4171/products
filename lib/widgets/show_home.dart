@@ -85,6 +85,11 @@ class _ShowHomeState extends State<ShowHome> {
             if (search.isNotEmpty) {
               products.removeWhere((element) => !element.name.toLowerCase().contains(search.toLowerCase()));
             }
+            if(products.isEmpty){
+              return Center(
+                child: Text("No hay productos"),
+              );
+            }
             return ListView(
               controller: _scrollController,
               children: products
