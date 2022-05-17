@@ -86,7 +86,7 @@ class _ShowHomeState extends State<ShowHome> {
               products.removeWhere((element) => !element.name.toLowerCase().contains(search.toLowerCase()));
             }
             if(products.isEmpty){
-              return Center(
+              return const Center(
                 child: Text("No hay productos"),
               );
             }
