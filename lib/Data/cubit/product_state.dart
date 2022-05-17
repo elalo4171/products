@@ -12,16 +12,20 @@ class ProductState extends Equatable {
     this.status = StatusPage.loading,
     this.idCategory = 0,
     this.productsFavorite = const [],
+    this.categories = const [],
     this.currentPage = 0,
     this.pagination = 1,
+    this.category = "",
   });
 
   final List<ProductModel> products;
   final StatusPage status;
   final int idCategory;
   final List<ProductModel> productsFavorite;
+  final List<String> categories;
   final int currentPage;
   final int pagination;
+  final String category;
 
   ProductState copyWith({
     List<ProductModel>? products,
@@ -30,6 +34,8 @@ class ProductState extends Equatable {
     List<ProductModel>? productsFavorite,
     int? currentPage,
     int? pagination,
+    List<String>? categories,
+    String? category,
   }) {
     return ProductState(
       products: products ?? this.products,
@@ -38,6 +44,8 @@ class ProductState extends Equatable {
       productsFavorite: productsFavorite ?? this.productsFavorite,
       currentPage: currentPage ?? this.currentPage,
       pagination: pagination ?? this.pagination,
+      categories: categories ?? this.categories,
+      category: category ?? this.category,
     );
   }
 
@@ -53,6 +61,8 @@ class ProductState extends Equatable {
           .toList(),
       currentPage: json['currentPage'],
       pagination: 1,
+      categories: (json['categories'] as List<dynamic>).cast<String>(),
+      category: "",
     );
   }
 
@@ -64,6 +74,8 @@ class ProductState extends Equatable {
       'productsFavorite': productsFavorite.map((e) => e.toJson()).toList(),
       'currentPage': currentPage,
       'pagination': pagination,
+      'categories': categories,
+      'category': category,
     };
   }
 
@@ -75,5 +87,7 @@ class ProductState extends Equatable {
         productsFavorite,
         currentPage,
         pagination,
+        categories,
+        category,
       ];
 }

@@ -19,6 +19,7 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
       products: state.products + products,
       pagination: state.pagination + 1,
     ));
+    createCategories();
   }
 
   void changePage(int index) {
@@ -59,10 +60,21 @@ class ProductCubit extends Cubit<ProductState> with HydratedMixin {
     emit(state.copyWith(status: StatusPage.loading));
     final List<ProductModel> products = await repository.getProducts(null);
     emit(state.copyWith(products: products, status: StatusPage.loaded));
+    createCategories();
   }
 
-  void changeCategory(int id) {
-    emit(state.copyWith(idCategory: id));
+  void createCategories() {
+    List<String> categories = [];
+    for (var e in state.products) {
+      if (!categories.contains(e.category)) {
+        categories.add(e.category);
+      }
+    }
+    emit(state.copyWith(categories: categories));
+  }
+
+  void changeCategory(String category) {
+    emit(state.copyWith(category: state.category == category ? "" : category));
   }
 
   @override

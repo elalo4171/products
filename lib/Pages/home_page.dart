@@ -22,9 +22,10 @@ class _BuildHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Products'),
+        title: Text('Products', style: _theme.textTheme.titleLarge ,),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {

@@ -37,19 +37,15 @@ class _ShowHomeState extends State<ShowHome> {
           child: BlocBuilder<ProductCubit, ProductState>(
             builder: (context, state) {
               return ListView(
-                scrollDirection: Axis.horizontal,
-                children: List.generate(
-                  20,
-                  (index) => CategoryItem(
-                    onTap: (p0) {
-                      context.read<ProductCubit>().changeCategory(index);
-                    },
-                    title: "Categoria $index",
-                    id: index,
-                    idSelected: state.idCategory,
-                  ),
-                ),
-              );
+                  scrollDirection: Axis.horizontal,
+                  children: List.from(state.categories.map((e) => CategoryItem(
+                        onTap: () {
+                          context.read<ProductCubit>().changeCategory(e);
+                          setState(() {});
+                        },
+                        title: e,
+                        selected: state.category,
+                      ))));
             },
           ),
         ),
@@ -60,9 +56,13 @@ class _ShowHomeState extends State<ShowHome> {
                 child: CircularProgressIndicator(),
               );
             }
+            List<ProductModel> products = state.products.toList();
+            if (state.category.isNotEmpty) {
+              products.removeWhere((element) => element.category != state.category);
+            }
             return ListView(
               controller: _scrollController,
-              children: state.products
+              children: products
                   .map<Widget>(
                     (e) => ProductWidget(
                       productModel: e,
@@ -122,6 +122,26 @@ class _ProductWidgetState extends State<ProductWidget> {
                   Text(
                     widget.productModel.description,
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        widget.productModel.category,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '\$${widget.productModel.unitPrice}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: IconButton(
@@ -146,21 +166,19 @@ class CategoryItem extends StatelessWidget {
   const CategoryItem({
     Key? key,
     required this.title,
-    required this.id,
-    this.idSelected = 0,
+    this.selected = "",
     required this.onTap,
   }) : super(key: key);
 
   final String title;
-  final int id;
-  final int idSelected;
-  final Function(int) onTap;
+  final String selected;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    final bool isSelected = id == idSelected;
+    final bool isSelected = title == selected;
     return GestureDetector(
-      onTap: () => onTap(id),
+      onTap: () => onTap(),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
